@@ -13,10 +13,10 @@ The project implements a streamlined solution that integrates with existing time
 - Supports offline access through SMS, ensuring information reaches students even without internet connectivity.
 
 **Technologies Used:**
-- Python
+- Javascript
 - SMS Gateway API (e.g., Arkesel API)
 - MySQL Database
-- HTML/CSS (if applicable for frontend components)
+- HTML/CSS 
 
 **Purpose:**
 This project aims to create a reliable and efficient communication tool that mitigates the challenges posed by erratic timetables, ultimately fostering a more stable and supportive academic environment.
