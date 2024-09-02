@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin SMS Alert System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-container" class="container">
+        <h1>Admin Login</h1>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    
+    <div id="admin-container" class="container" style="display: none;">
+        <h1>Send SMS Alert</h1>
+        <form id="smsForm">
+            <label for="classSelect">Select Class:</label>
+            <select id="classSelect" name="classSelect" required>
+                <option value="">Select a class</option>
+                <option value="Btech computer science class">Btech computer science class</option>
+                <option value="HND computer science class">HND computer science class</option>
+            </select>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            
+            <button type="submit">Send SMS</button>
+        </form>
+        <div id="response"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
