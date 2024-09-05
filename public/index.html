@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for character set and viewport settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Page title -->
     <title>Admin SMS Alert System</title>
+    
+    <!-- Link to the external stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Login container, initially visible -->
     <div id="login-container" class="container">
         <h1>Admin Login</h1>
         <form id="loginForm">
+            <!-- Username input field -->
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             
+            <!-- Password input field -->
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             
+            <!-- Login button -->
             <button type="submit">Login</button>
         </form>
     </div>
     
+    <!-- Admin container, initially hidden, shown after successful login -->
     <div id="admin-container" class="container" style="display: none;">
         <h1>Send SMS Alert</h1>
         <form id="smsForm">
+            <!-- Dropdown to select the class to send SMS to -->
             <label for="classSelect">Select Class:</label>
             <select id="classSelect" name="classSelect" required>
                 <option value="">Select a class</option>
-                <option value="Btech computer science class">Btech computer science class</option>
-                <option value="HND computer science class">HND computer science class</option>
+                <option value="Btech computer science class">BTECH COMPUTER SCIENCE CLASS</option>
+                <option value="HND computer science class">HND COMPUTER SCIENCE CLASS</option>
             </select>
             
+            <!-- Text area for entering the SMS message -->
             <label for="message">Message:</label>
             <textarea id="message" name="message" required></textarea>
             
+            <!-- Button to submit the form and send the SMS -->
             <button type="submit">Send SMS</button>
         </form>
+        
+        <!-- Container to display the response from the server after sending SMS -->
         <div id="response"></div>
     </div>
+    
+    <!-- Link to the external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
