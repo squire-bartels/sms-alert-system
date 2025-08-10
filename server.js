@@ -4,7 +4,9 @@ const axios = require('axios'); // Importing Axios to make HTTP requests
 const bodyParser = require('body-parser'); // Importing body-parser to handle incoming request bodies
 const app = express(); // Initializing the Express application
 const cors = require('cors'); // Initializing the Cross Origin Resource Sharing(cors) application
-const port = 3000; // Setting the port number for the server
+const rateLimit = require('express-rate-limit'); // Importing rate limiting middleware
+const Joi = require('joi'); // Importing Joi for input validation
+const port = process.env.PORT || 3000; // Setting the port number for the server (default to 3000)
 
 // Middleware to parse incoming JSON requests
 app.use(bodyParser.json());
@@ -12,11 +14,26 @@ app.use(bodyParser.json());
 // Middleware to parse incoming URL-encoded data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Middleware to allowed all routes
-app.use(cors());
+// Middleware to allow specific routes
+const corsOptions = {
+    origin: 'https://your-trusted-domain.com', // Replace with your trusted domain
+};
+app.use(cors(corsOptions));
 
-// Your Arkesel API key for sending SMS
-const ARKESEL_API_KEY = 'YkZTRGZoZ1pWZFNQTXZOcmhXSGY';
+// Middleware for rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+});
+app.use(limiter);
+
+// Your Arkesel API key for sending SMS (stored as an environment variable)
+const ARKESEL_API_KEY = process.env.ARKESEL_API_KEY;
+
+if (!ARKESEL_API_KEY) {
+    console.error('Missing ARKESEL_API_KEY environment variable');
+    process.exit(1); // Exit the application if API key is missing
+}
 
 // Middleware to serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,14 +43,21 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Validation schema for incoming requests
+const smsSchema = Joi.object({
+    classSelect: Joi.array().items(Joi.string().min(10).max(15)).required(), // Validate phone numbers
+    message: Joi.string().min(1).max(160).required(), // Validate message length
+});
+
 // POST route to handle sending SMS
 app.post('/send-sms', async (req, res) => {
-    const { classSelect, message } = req.body; // Extracting class selection and message from the request body
+    const { error, value } = smsSchema.validate(req.body); // Validate request body
 
-    // Check if the classSelect or message is missing
-    if (!classSelect || !message) {
-        return res.status(400).json({ error: 'Class selection and message are required' });
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message }); // Respond with validation error
     }
+
+    const { classSelect, message } = value; // Extract validated data
 
     try {
         // Sending SMS to all selected phone numbers using Promise.all
